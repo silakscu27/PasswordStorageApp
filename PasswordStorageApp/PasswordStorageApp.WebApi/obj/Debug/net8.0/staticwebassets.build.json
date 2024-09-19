@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "0f1SjwGt6JyAEDCivDl7Ue5sBBSSxIqyy+oVXO+I0Ic=",
+  "Source": "PasswordStorageApp.WebApi",
+  "BasePath": "_content/PasswordStorageApp.WebApi",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
