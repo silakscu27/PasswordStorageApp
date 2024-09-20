@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "1yzMTBeL0tyKSblJjFfi3KZCnNnLC/m09GFFtbrBOJeDtMCZVzVk/uPqm6HiWDmoYcFurw0SellZzZpz6YHh6g==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Sıla\\OneDrive\\Belgeler\\c# dersleri\\PasswordStorageApp\\PasswordStorageApp.Domain\\PasswordStorageApp.Domain.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Sıla\\.nuget\\packages\\ulid\\1.3.4\\ulid.1.3.4.nupkg.sha512"
+  ],
+  "logs": []
+}
