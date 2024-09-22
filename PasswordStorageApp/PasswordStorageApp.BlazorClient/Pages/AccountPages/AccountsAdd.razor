@@ -2,12 +2,12 @@
 @using System.Net
 @using PasswordStorageApp.Domain.Dtos
 @using PasswordStorageApp.Domain.Enums
-@using PasswordStorageApp.Domain.Models
 @inject DialogService DialogService
 @inject HttpClient HttpClient
+@inject NotificationService NotificationService
 @inject NavigationManager Navigation
 
-<RadzenTemplateForm Data="@createDto">
+<RadzenTemplateForm Data="@createDto" Submit="@((AccountCreateDto args) => SubmitAsync(args))">
     <RadzenRow Gap="2rem" class="rz-p-0 rz-p-lg-4">
         <RadzenColumn Size="12" SizeMD="12">
             <RadzenStack>
@@ -49,5 +49,61 @@
 </RadzenTemplateForm>
 
 @code {
+    [Parameter] public bool IsDialog { get; set; } = false;
+
     private AccountCreateDto createDto = new();
+
+    private IEnumerable<AccountType> accountTypes = Enum.GetValues<AccountType>();
+
+    private async Task SubmitAsync(AccountCreateDto accountCreateDto)
+    {
+        var response = await HttpClient.PostAsJsonAsync("Accounts", createDto);
+
+        if (response.IsSuccessStatusCode)
+        {
+            NotificationService.Notify(new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Success,
+                    Summary = "Hesap Eklendi",
+                    Detail = "Hesap başarıyla eklendi.",
+                    Duration = 4000
+                });
+
+            if (IsDialog)
+                DialogService.Close(true);
+            else
+                Navigation.NavigateTo("/accounts");
+        }
+        else
+        {
+            if (response.StatusCode == HttpStatusCode.BadRequest || response.StatusCode == HttpStatusCode.NotFound)
+            {
+                NotificationService.Notify(new NotificationMessage
+                    {
+                        Severity = NotificationSeverity.Warning,
+                        Summary = "Uyarı",
+                        Detail = "Lütfen formu kontrol ediniz...",
+                        Duration = 4000
+                    });
+            }
+            else
+            {
+                NotificationService.Notify(new NotificationMessage
+                    {
+                        Severity = NotificationSeverity.Error,
+                        Summary = "Hata",
+                        Detail = "Hesap eklenirken sunucu tarafında bir hata oluştu.",
+                        Duration = 4000
+                    });
+            }
+        }
+    }
+
+    private void Cancel()
+    {
+        if (IsDialog)
+            DialogService.Close(false);
+        else
+            Navigation.NavigateTo("/accounts");
+    }
 }
