@@ -3,12 +3,15 @@
 @inject HttpClient HttpClient
 @using PasswordStorageApp.Domain.Dtos
 @inject DialogService DialogService
+@inject NotificationService NotificationService
+@using PasswordStorageApp.BlazorClient.Pages.AccountPages
+
 
 <PageTitle>Home</PageTitle>
 
 @if (accounts is null)
 {
-    <p><em>Loading...</em></p>
+    <RadzenProgressBarCircular ProgressBarStyle="ProgressBarStyle.Primary" Value="50" />
 }
 else
 {
@@ -31,7 +34,7 @@ else
                     <Template Context="data">
                         <RadzenStack Orientation="Orientation.Horizontal">
                             <RadzenButton ButtonStyle="ButtonStyle.Info" Icon="edit" />
-                            <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" />
+                            <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Click="@(() => HandleRemoveClick(data))" />
                         </RadzenStack>
                     </Template>
                 </RadzenDataGridColumn>
@@ -43,26 +46,33 @@ else
 
 @code
 {
-    private List<AccountGetAllDto> accounts = null;
+    private IEnumerable<AccountGetAllDto> accounts = null;
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        accounts = await HttpClient.GetFromJsonAsync<List<AccountGetAllDto>>("Accounts");
+        accounts = await HttpClient.GetFromJsonAsync<IEnumerable<AccountGetAllDto>>("Accounts");
     }
 
     private async Task HandleRemoveClick(AccountGetAllDto account)
     {
-        var response = await HttpClient.DeleteAsync($"Accounts/{account.Id}");
+        CancellationTokenSource cts = new CancellationTokenSource();
+        var response = await HttpClient.DeleteAsync($"Accounts/{account.Id}", cts.Token);
 
         if (response.IsSuccessStatusCode)
         {
-            accounts.Remove(account);
+            accounts = accounts.Where(ac => ac.Id != account.Id);
+
+            // await InvokeAsync(StateHasChanged);
+
+            NotificationService.Notify(NotificationSeverity.Success, "Kayıt silindi!", "Seçili kayıt başarıyla silindi!");
         }
         else
         {
             // handle error
             Console.WriteLine("There was an unexpected error occured.");
+
+            NotificationService.Notify(NotificationSeverity.Error, "Hata!", "Kayıt silinirken hata oluştu!");
         }
     }
 }
