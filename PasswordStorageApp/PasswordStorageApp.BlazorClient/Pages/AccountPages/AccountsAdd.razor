@@ -4,7 +4,7 @@
 @using PasswordStorageApp.Domain.Enums
 @inject DialogService DialogService
 @inject HttpClient HttpClient
-@inject NotificationService NotificationService
+@inject IToastService ToastService
 @inject NavigationManager Navigation
 
 <RadzenTemplateForm Data="@createDto" Submit="@((AccountCreateDto args) => SubmitAsync(args))">
@@ -61,16 +61,11 @@
 
         if (response.IsSuccessStatusCode)
         {
-            NotificationService.Notify(new NotificationMessage
-                {
-                    Severity = NotificationSeverity.Success,
-                    Summary = "Hesap Eklendi",
-                    Detail = "Hesap başarıyla eklendi.",
-                    Duration = 4000
-                });
+            ToastService.Success("Hesap basariyla eklendi.", "Hesap Eklendi");
 
             if (IsDialog)
                 DialogService.Close(true);
+
             else
                 Navigation.NavigateTo("/accounts");
         }
@@ -78,23 +73,11 @@
         {
             if (response.StatusCode == HttpStatusCode.BadRequest || response.StatusCode == HttpStatusCode.NotFound)
             {
-                NotificationService.Notify(new NotificationMessage
-                    {
-                        Severity = NotificationSeverity.Warning,
-                        Summary = "Uyarı",
-                        Detail = "Lütfen formu kontrol ediniz...",
-                        Duration = 4000
-                    });
+                ToastService.Warning("Lutfen formu kontrol ediniz...", "Uyari");
             }
             else
             {
-                NotificationService.Notify(new NotificationMessage
-                    {
-                        Severity = NotificationSeverity.Error,
-                        Summary = "Hata",
-                        Detail = "Hesap eklenirken sunucu tarafında bir hata oluştu.",
-                        Duration = 4000
-                    });
+                ToastService.Error("Hesap eklenirken sunucu tarafinda bir hata olustu.", "Hata");
             }
         }
     }
@@ -103,6 +86,7 @@
     {
         if (IsDialog)
             DialogService.Close(false);
+
         else
             Navigation.NavigateTo("/accounts");
     }
