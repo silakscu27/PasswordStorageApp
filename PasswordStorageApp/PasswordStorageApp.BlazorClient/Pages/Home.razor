@@ -1,67 +1,7 @@
 ﻿@page "/"
-@using PasswordStorageApp.Domain.Models
-@inject HttpClient HttpClient
-@using PasswordStorageApp.Domain.Dtos
-@inject DialogService DialogService
 
 <PageTitle>Home</PageTitle>
 
-@if (accounts is null)
-{
-    <p><em>Loading...</em></p>
-}
-else
-{
-    <RadzenCard Variant="Variant.Filled">
+@code{
 
-        <h3 class="text-center">Accounts</h3>
-
-        <RadzenButton ButtonStyle="ButtonStyle.Primary" Text="Add" Style="margin-bottom: 1rem;" />
-
-        <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" FilterMode="FilterMode.Simple" AllowSorting="true" PageSize="10" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
-                        Data="@accounts" ColumnWidth="200px">
-            <Columns>
-                <RadzenDataGridColumn Property="@nameof(AccountGetAllDto.Id)" Title="ID" TextAlign="TextAlign.Center" />
-                <RadzenDataGridColumn Property="@nameof(AccountGetAllDto.Username)" Title="UserName" TextAlign="TextAlign.Center" />
-                <RadzenDataGridColumn Property="@nameof(AccountGetAllDto.Password)" Title="Password" TextAlign="TextAlign.Center" />
-                <RadzenDataGridColumn Property="@nameof(AccountGetAllDto.Type)" Title="Type" TextAlign="TextAlign.Center" />
-                <RadzenDataGridColumn Property="@nameof(AccountGetAllDto.CreatedOn)" Title="Created On" TextAlign="TextAlign.Center" />
-
-                <RadzenDataGridColumn Title="Actions" Frozen="true" Sortable="false" Filterable="false" Width="120px" TextAlign="TextAlign.Center">
-                    <Template Context="data">
-                        <RadzenStack Orientation="Orientation.Horizontal">
-                            <RadzenButton ButtonStyle="ButtonStyle.Info" Icon="edit" />
-                            <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" />
-                        </RadzenStack>
-                    </Template>
-                </RadzenDataGridColumn>
-
-            </Columns>
-        </RadzenDataGrid>
-    </RadzenCard>
-}
-
-@code
-{
-    private List<AccountGetAllDto> accounts = null;
-
-    protected override async Task OnInitializedAsync()
-    {
-        await base.OnInitializedAsync();
-        accounts = await HttpClient.GetFromJsonAsync<List<AccountGetAllDto>>("Accounts");
-    }
-
-    private async Task HandleRemoveClick(AccountGetAllDto account)
-    {
-        var response = await HttpClient.DeleteAsync($"Accounts/{account.Id}");
-
-        if (response.IsSuccessStatusCode)
-        {
-            accounts.Remove(account);
-        } else
-        {
-            // handle error
-            Console.WriteLine("There was an unexpected error occured.");
-        }
-    }
 }
