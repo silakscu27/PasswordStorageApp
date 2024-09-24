@@ -1,7 +1,8 @@
 ﻿@page "/accounts"
-@using Microsoft.AspNetCore.Http.Connections
 @using Microsoft.AspNetCore.SignalR.Client
+@using Microsoft.Extensions.Logging
 @using PasswordStorageApp.Domain.Dtos
+@using IToastService = PasswordStorageApp.MauiClient.Services.IToastService
 @inject HttpClient HttpClient
 @inject DialogService DialogService
 @inject IToastService ToastService
@@ -23,7 +24,7 @@ else
 
 
         <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" FilterMode="FilterMode.Simple" AllowSorting="true" PageSize="10" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
-                        Data="@accounts" ColumnWidth="170px">
+                        Data="@accounts" ColumnWidth="300px">
             <Columns>
                 <RadzenDataGridColumn Property="@nameof(AccountGetAllDto.Id)" Title="ID" TextAlign="TextAlign.Center" />
                 <RadzenDataGridColumn Property="@nameof(AccountGetAllDto.Username)" Title="UserName" TextAlign="TextAlign.Center" />
@@ -60,7 +61,7 @@ else
         // accounts = await HttpClient.GetFromJsonAsync<IEnumerable<AccountGetAllDto>>("Accounts");
 
         hubConnection = new HubConnectionBuilder()
-            .WithUrl("https://csharpjavadandahaiyi.tailwindcomponents.io/hubs/accountsHub", HttpTransportType.LongPolling)
+            .WithUrl("https://csharpjavadandahaiyi.tailwindcomponents.io/hubs/accountsHub")
             .WithAutomaticReconnect()
             .ConfigureLogging(config => config.SetMinimumLevel(LogLevel.Information))
             .Build();
@@ -69,7 +70,7 @@ else
         {
             accounts = accounts.Append(createdAccount);
 
-            ToastService.Info($"Farkli bir kullanici tarafindan yeni bir hesap olusturuldu. {createdAccount.Username}");
+            ToastService.Info($"A new account was created by a different user. {createdAccount.Username}");
 
             await InvokeAsync(StateHasChanged);
         });
@@ -78,7 +79,7 @@ else
         {
             accounts = accounts.Where(ac => ac.Id != deletedAccountId);
 
-            ToastService.Info($"Farkli bir kullanici tarafindan yeni bir hesap silindi. {deletedAccountId}");
+            ToastService.Info($"A new account was deleted by a different user. {deletedAccountId}");
 
             await InvokeAsync(StateHasChanged);
         });
@@ -93,7 +94,7 @@ else
 
             accounts = new List<AccountGetAllDto>(tempAccounts);
 
-            ToastService.Info($"Farkli bir kullanici tarafindan bir hesap guncellendi. {updatedAccount.Id}");
+            ToastService.Info($"A new account was updated by a different user. {updatedAccount.Id}");
 
             await InvokeAsync(StateHasChanged);
         });
@@ -106,7 +107,7 @@ else
 
     private async Task HandleAddClickAsync()
     {
-        var result = await DialogService.OpenAsync<AccountsAdd>($"Hesap Ekle",
+        var result = await DialogService.OpenAsync<AccountsAdd>($"Add account",
              new Dictionary<string, object>() { { "IsDialog", true } },
              new DialogOptions()
                  {
@@ -123,7 +124,7 @@ else
     }
     private async Task HandleUpdateClickAsync(Guid id)
     {
-        var result = await DialogService.OpenAsync<AccountsUpdate>($"Hesap Guncelle",
+        var result = await DialogService.OpenAsync<AccountsUpdate>($"Update account",
             new Dictionary<string, object>() { { "IsDialog", true }, { "Id", id } },
             new DialogOptions()
                 {
@@ -144,15 +145,14 @@ else
         CancellationTokenSource cts = new CancellationTokenSource();
 
         var result = await DialogService
-            .Confirm("Silmek istediginize emin misiniz?", "Secili Kayit Siliniyor", new ConfirmOptions() { OkButtonText = "Evet", CancelButtonText = "Hayir" });
+            .Confirm("Are you sure you want to delete?", "Deleting Selected Record", new ConfirmOptions() { OkButtonText = "Yes", CancelButtonText = "No" });
 
 
         if (result is not null && (bool)result)
         {
-
             await hubConnection.InvokeAsync("RemoveAsync", account.Id, cts.Token);
 
-            ToastService.Success("Secili kayit basariyla silindi.", "Kayit Silindi");
+            ToastService.Success("The selected record was deleted successfully.", "Record Deleted");
 
             accounts = accounts.Where(ac => ac.Id != account.Id);
         }
