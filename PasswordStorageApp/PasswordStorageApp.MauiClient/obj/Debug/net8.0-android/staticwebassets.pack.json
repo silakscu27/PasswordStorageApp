@@ -1,0 +1,45 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Users\\Sıla\\OneDrive\\Belgeler\\c# dersleri\\PasswordStorageApp\\PasswordStorageApp.MauiClient\\obj\\Debug\\net8.0-android\\scopedcss\\bundle\\PasswordStorageApp.MauiClient.styles.css",
+      "PackagePath": "staticwebassets\\PasswordStorageApp.MauiClient.styles.css"
+    },
+    {
+      "Id": "C:\\Users\\Sıla\\OneDrive\\Belgeler\\c# dersleri\\PasswordStorageApp\\PasswordStorageApp.MauiClient\\wwwroot\\css\\app.css",
+      "PackagePath": "staticwebassets\\css\\app.css"
+    },
+    {
+      "Id": "C:\\Users\\Sıla\\OneDrive\\Belgeler\\c# dersleri\\PasswordStorageApp\\PasswordStorageApp.MauiClient\\wwwroot\\css\\bootstrap\\bootstrap.min.css",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\bootstrap.min.css"
+    },
+    {
+      "Id": "C:\\Users\\Sıla\\OneDrive\\Belgeler\\c# dersleri\\PasswordStorageApp\\PasswordStorageApp.MauiClient\\wwwroot\\css\\bootstrap\\bootstrap.min.css.map",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\bootstrap.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\Sıla\\OneDrive\\Belgeler\\c# dersleri\\PasswordStorageApp\\PasswordStorageApp.MauiClient\\wwwroot\\favicon.png",
+      "PackagePath": "staticwebassets\\favicon.png"
+    },
+    {
+      "Id": "C:\\Users\\Sıla\\OneDrive\\Belgeler\\c# dersleri\\PasswordStorageApp\\PasswordStorageApp.MauiClient\\wwwroot\\index.html",
+      "PackagePath": "staticwebassets\\index.html"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0-android\\staticwebassets\\msbuild.PasswordStorageApp.MauiClient.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0-android\\staticwebassets\\msbuild.build.PasswordStorageApp.MauiClient.props",
+      "PackagePath": "build\\PasswordStorageApp.MauiClient.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0-android\\staticwebassets\\msbuild.buildMultiTargeting.PasswordStorageApp.MauiClient.props",
+      "PackagePath": "buildMultiTargeting\\PasswordStorageApp.MauiClient.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0-android\\staticwebassets\\msbuild.buildTransitive.PasswordStorageApp.MauiClient.props",
+      "PackagePath": "buildTransitive\\PasswordStorageApp.MauiClient.props"
+    }
+  ],
+  "ElementsToRemove": []
+}
